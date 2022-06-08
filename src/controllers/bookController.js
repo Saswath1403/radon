@@ -29,9 +29,18 @@ const createBook = async function (req,res) {
         }
 
         const findPrice = async function (req,res) {
-            let fetchPrice = (await bookModel.find( { price : { $gte: 50, $lte: 100} } ).select({ author_id :1},{author_id :2}))
-            console.log(fetchPrice)
-        res.send({msg : fetchPrice})
+            let fetchPrice = (await bookModel.find( { price : { $gte: 50, $lte: 100} } ).select({ author_id :1,name:1,price:1, _id:0}))
+            let id = fetchPrice.map(input => input.author_id)
+            let arr=[]
+            for (let i=0; i<id.length; i++)
+            {
+                const x = id[i]
+                const author = await authorModel.find({author_id: x}).select({author_name:1,author_id:1,_id:0})
+                arr.push(...author)
+            }
+            const authorName = arr
+            res.send({fetchPrice,authorName})
+
         }
 
 

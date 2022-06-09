@@ -1,6 +1,7 @@
 const bookModel = require("../models/bookModel")
 const authorModel = require("../models/authorModel")
 const { STATES } = require("mongoose")
+const { query } = require("express")
 
 const createBook = async function (req,res) {
     let data = req.body
@@ -43,9 +44,27 @@ const createBook = async function (req,res) {
 
         }
 
+        const getBooks = async function (req,res) {
+        let storeBooks = req.params.author_id
+        let books = await bookModel.find({author_id : storeBooks}).select({name: 1})
+        console.log(books)
+        res.send({books})
+        }
+
+        const findAuthors = async function (req,res) {
+            let storeBooks = req.params.author_id
+            let books = await bookModel.find({author_id : storeBooks},{rating :{ $gte: 4}}).select({name: 1})
+            let authors = await authorModel.find({author_id : storeBooks},{age :{ $gte: 50}}).select({name: 1})
+            res.send({books},{authors})
+            }
+
+
 
 module.exports.createBook = createBook
 module.exports.createAuthor = createAuthor
 module.exports.booksByChetan = booksByChetan
+module.exports.findAuthors = findAuthors
 module.exports.updatePrice = updatePrice
 module.exports.findPrice = findPrice
+module.exports.getBooks = getBooks
+

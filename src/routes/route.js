@@ -12,4 +12,10 @@ router.post("/updatePrice", bookController.updatePrice)
 
 router.post("/findPrice", bookController.findPrice)
 
+router.get("/books-by-authorid/:author_id", bookController.getBooks)
+
+router.get("/authors-by-authorid/:author_id", bookController.findAuthors)
+
+// router.post("/authorList", bookController.authorList)
+
 module.exports = router;
